@@ -1,0 +1,31 @@
+.Task {
+  font-size: 2rem;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+
+  .checkbox-container {
+    width: 50px;
+    margin-top: -7px;
+
+    .checkbox {
+      border: none;
+      border-color: transparent;
+      padding: 0;
+      box-shadow: none;
+    }
+  }
+
+  .task-container {
+    flex-grow: 1;
+    max-width: 668px;
+    word-wrap: break-word;
+  }
+
+  .arrow-container {
+    width: 50px;
+  }
+}
