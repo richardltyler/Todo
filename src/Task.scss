@@ -7,15 +7,38 @@
   gap: 1rem;
   width: 100%;
 
+  .arrow-container {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #003049;
+  }
+
   .checkbox-container {
     width: 50px;
     margin-top: -7px;
+  }
 
-    .checkbox {
-      border: none;
-      border-color: transparent;
-      padding: 0;
-      box-shadow: none;
+  .checkbox {
+    accent-color: #c1121f;
+    border: none;
+    border-color: transparent;
+    box-shadow: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .delete-button {
+    background: #003049;
+    border: 0;
+    border-radius: 5%;
+    color: #fef8ec;
+    cursor: pointer;
+    font-size: 1rem;
+
+    &:hover {
+      background: #c1121f;
     }
   }
 
@@ -23,9 +46,5 @@
     flex-grow: 1;
     max-width: 668px;
     word-wrap: break-word;
-  }
-
-  .arrow-container {
-    width: 50px;
   }
 }

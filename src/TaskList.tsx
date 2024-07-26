@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { Data, Todo } from "./App";
 import Task from "./Task";
 import "./TaskList.scss";
@@ -34,6 +34,15 @@ export default function TaskList({ todos, setTodos }: Props) {
     ]);
   };
 
+  const handleDelete = (task: Todo) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== task.id);
+
+    setTodos([
+      ...updatedTodos.filter((todo) => !todo.isComplete),
+      ...updatedTodos.filter((todo) => !!todo.isComplete),
+    ]);
+  };
+
   useEffect(() => {
     setTodos([
       ...dummyTodos.data.todos.filter((todo) => !todo.isComplete),
@@ -44,7 +53,14 @@ export default function TaskList({ todos, setTodos }: Props) {
   return (
     <div className='TaskList' data-testid='TaskList'>
       {todos.map((todo) => {
-        return <Task handleComplete={handleClick} key={todo.id} task={todo} />;
+        return (
+          <Task
+            handleComplete={handleClick}
+            handleDelete={handleDelete}
+            key={todo.id}
+            task={todo}
+          />
+        );
       })}
     </div>
   );
