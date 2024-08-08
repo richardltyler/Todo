@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import "./App.scss";
+import { useContext, useEffect, useRef, useState } from "react";
+import { ActionTypes, AppContext } from "../context.tsx";
 import TaskList from "./TaskList.tsx";
 
 export type Todo = {
@@ -16,30 +16,42 @@ export type Data = {
 
 function App() {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const { state, dispatch } = useContext(AppContext);
   const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [newTodo, setNewTodo] = useState({
+    id: 0,
+    task: "",
+    isComplete: false,
+  });
 
-  // useEffect(() => {
-  //   console.log("");
-  // }, [todos]);
+  useEffect(() => {
+    // console.log(state);
+    // dispatch({ type: ActionTypes.Create, payload: newTodo });
+  }, [todos]);
 
   return (
     <div className='App' data-testid='App'>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          const newTodo = {
-            id: Math.floor(Math.random() * 100),
-            task: inputRef?.current?.value || "",
-            isComplete: false,
-          };
+
+          dispatch({ type: ActionTypes.Create, payload: newTodo });
+
           setTodos([
             newTodo,
             ...todos.filter((todo) => !todo.isComplete),
             ...todos.filter((todo) => !!todo.isComplete),
           ]);
         }}
+        onKeyDown={() => {
+          setNewTodo({
+            ...newTodo,
+            task: inputRef?.current?.value || "",
+            isComplete: false,
+          });
+        }}
       >
-        <input type='text' ref={inputRef}></input>
+        <input className='form-input' type='text' ref={inputRef}></input>
       </form>
       <TaskList todos={todos} setTodos={setTodos} />
     </div>

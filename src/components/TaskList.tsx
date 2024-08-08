@@ -1,7 +1,7 @@
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useContext, useEffect } from "react";
+import { AppContext } from "../context";
 import { Data, Todo } from "./App";
 import Task from "./Task";
-import "./TaskList.scss";
 
 const dummyTodos: Data = {
   data: {
@@ -19,6 +19,8 @@ type Props = {
 };
 
 export default function TaskList({ todos, setTodos }: Props) {
+  const { state } = useContext(AppContext);
+
   const handleClick = (task: Todo) => {
     const updatedTodos = todos.map((todo) => {
       if (todo.id === task.id) {
@@ -34,14 +36,14 @@ export default function TaskList({ todos, setTodos }: Props) {
     ]);
   };
 
-  const handleDelete = (task: Todo) => {
-    const updatedTodos = todos.filter((todo) => todo.id !== task.id);
+  // const handleDelete = (task: Todo) => {
+  //   const updatedTodos = todos.filter((todo) => todo.id !== task.id);
 
-    setTodos([
-      ...updatedTodos.filter((todo) => !todo.isComplete),
-      ...updatedTodos.filter((todo) => !!todo.isComplete),
-    ]);
-  };
+  //   setTodos([
+  //     ...updatedTodos.filter((todo) => !todo.isComplete),
+  //     ...updatedTodos.filter((todo) => !!todo.isComplete),
+  //   ]);
+  // };
 
   useEffect(() => {
     setTodos([
@@ -52,11 +54,11 @@ export default function TaskList({ todos, setTodos }: Props) {
 
   return (
     <div className='TaskList' data-testid='TaskList'>
-      {todos.map((todo) => {
+      {state.todos.map((todo) => {
         return (
           <Task
             handleComplete={handleClick}
-            handleDelete={handleDelete}
+            // handleDelete={handleDelete}
             key={todo.id}
             task={todo}
           />
