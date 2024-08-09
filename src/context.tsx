@@ -19,13 +19,13 @@ type ActionMap<M extends { [index: string]: any }> = {
 export enum ActionTypes {
   Create = "CREATE_TODO",
   Delete = "DELETE_TODO",
+  Update = "UPDATE_TODO",
 }
-
-// Product
 
 type ActionPayload = {
   [ActionTypes.Create]: Todo;
   [ActionTypes.Delete]: Todo;
+  [ActionTypes.Update]: Todo;
 };
 
 export type TodoActions =
@@ -40,21 +40,40 @@ const initialState = {
 };
 
 const reducer = (state: { todos: Todo[] }, action: TodoActions) => {
+  const sortTasks = (todos: Todo[]) => [
+    ...todos.filter((todo) => !todo.isComplete),
+    ...todos.filter((todo) => !!todo.isComplete),
+  ];
+
   switch (action.type) {
     case ActionTypes.Create:
-      console.log("thang", action.payload);
+      const newTodos = [action.payload, ...state.todos];
+
+      console.log("create thang", newTodos);
       return {
         ...state,
-        todos: [action.payload, ...state.todos],
+        todos: sortTasks(newTodos),
       };
     case ActionTypes.Delete:
-      console.log(
-        "delete thang",
-        state.todos.filter((task) => task.id === action.payload.id)
+      const filtered = state.todos.filter(
+        (task) => task.id !== action.payload.id
       );
+
+      console.log("delete thang", filtered);
       return {
         ...state,
-        todos: state.todos.filter((task) => task.id !== action.payload.id),
+        todos: sortTasks(filtered),
+      };
+    case ActionTypes.Update:
+      const updated = state.todos.map((task) => {
+        console.log(task.id === action.payload.id);
+        return task.id === action.payload.id ? action.payload : task;
+      });
+
+      console.log("update thang", updated);
+      return {
+        ...state,
+        todos: sortTasks(updated),
       };
   }
 };

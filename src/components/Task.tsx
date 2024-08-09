@@ -4,22 +4,27 @@ import { Todo } from "./App";
 
 type Props = {
   task: Todo;
-  handleComplete: (task: Todo) => void;
-  // handleDelete: (task: Todo) => void;
 };
 
 type DeleteProps = {
   task: Todo;
 };
 
-export default function Task({ task, handleComplete }: Props) {
+export default function Task({ task }: Props) {
   const { state, dispatch } = useContext(AppContext);
 
   const deleteStuff = ({ task }: DeleteProps) => {
-    console.log(task);
+    // console.log(task);
     dispatch({ type: ActionTypes.Delete, payload: task });
   };
 
+  const completeTask = () =>
+    dispatch({
+      type: ActionTypes.Update,
+      payload: { ...task, isComplete: !task.isComplete },
+    });
+
+  // TODO: make this a form to be submitted
   return (
     <div className='Task' data-testid='Task'>
       <div className='checkbox-container'>
@@ -27,12 +32,7 @@ export default function Task({ task, handleComplete }: Props) {
           className='checkbox'
           type='checkbox'
           defaultChecked={task.isComplete}
-          onClick={() =>
-            handleComplete({
-              ...task,
-              isComplete: !task.isComplete,
-            })
-          }
+          onChange={completeTask}
         ></input>
       </div>
       <div className='task-container'>

@@ -32,23 +32,24 @@ body {
   align-items: center;
 }
 
-form {
-  max-width: 800px;
-  width: 100%;
-  text-align: center;
-}
+// TODO: style newTask
+// form {
+//   max-width: 800px;
+//   width: 100%;
+//   text-align: center;
+// }
 
-.form-input {
-  padding: 0;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-bottom: 1px solid #003049;
-  background: transparent;
-  text-align: center;
-  width: 100%;
+// .form-input {
+//   padding: 0;
+//   border-top: none;
+//   border-left: none;
+//   border-right: none;
+//   border-bottom: 1px solid #003049;
+//   background: transparent;
+//   text-align: center;
+//   width: 100%;
 
-  &:focus {
-    outline: none;
-  }
-}
+//   &:focus {
+//     outline: none;
+//   }
+// }
