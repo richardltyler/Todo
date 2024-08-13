@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import { AppContext } from "../context";
+import { useAppContext } from "../context";
 import Task from "./Task";
 
 type Props = {};
 
 export default function TaskList({}: Props) {
-  const { state } = useContext(AppContext);
+  const { state } = useAppContext();
 
   return (
     <div className='TaskList' data-testid='TaskList'>

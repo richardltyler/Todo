@@ -1,20 +1,16 @@
-import React, { useContext } from "react";
-import { ActionTypes, AppContext } from "../context";
+import React, { useEffect, useRef } from "react";
+import { ActionTypes, useAppContext } from "../context";
 import { Todo } from "./App";
 
 type Props = {
   task: Todo;
 };
 
-type DeleteProps = {
-  task: Todo;
-};
-
 export default function Task({ task }: Props) {
-  const { state, dispatch } = useContext(AppContext);
+  const { dispatch } = useAppContext();
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const deleteStuff = ({ task }: DeleteProps) => {
-    // console.log(task);
+  const deleteStuff = () => {
     dispatch({ type: ActionTypes.Delete, payload: task });
   };
 
@@ -24,7 +20,17 @@ export default function Task({ task }: Props) {
       payload: { ...task, isComplete: !task.isComplete },
     });
 
-  // TODO: make this a form to be submitted
+  const updateTask = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (inputRef.current?.value) {
+      dispatch({
+        type: ActionTypes.Update,
+        payload: { ...task, task: inputRef.current.value },
+      });
+    }
+  };
+
   return (
     <div className='Task' data-testid='Task'>
       <div className='checkbox-container'>
@@ -33,20 +39,23 @@ export default function Task({ task }: Props) {
           type='checkbox'
           defaultChecked={task.isComplete}
           onChange={completeTask}
-        ></input>
+        />
       </div>
       <div className='task-container'>
-        <input
-          className='task-title-input'
-          type='text'
-          placeholder={task.task}
-        ></input>
+        <form onSubmit={updateTask}>
+          <input
+            className='task-title-input'
+            type='text'
+            defaultValue={task.task}
+            ref={inputRef}
+          />
+        </form>
       </div>
       <div className='arrow-container'>
         <button
           className='delete-button'
           type='button'
-          onClick={() => deleteStuff({ task })}
+          onClick={() => deleteStuff()}
         >
           Delete
         </button>

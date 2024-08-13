@@ -15,14 +15,6 @@ export type Data = {
 };
 
 function App() {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [todos, setTodos] = useState<Todo[] | []>([]);
-  const [newTodo, setNewTodo] = useState({
-    id: 0,
-    task: "",
-    isComplete: false,
-  });
-
   return (
     <div className='App' data-testid='App'>
       <NewTask />

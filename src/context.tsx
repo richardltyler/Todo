@@ -1,4 +1,10 @@
-import React, { createContext, Dispatch, useReducer } from "react";
+import React, {
+  createContext,
+  Dispatch,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 import { Todo } from "./components/App";
 
 type InitialStateType = {
@@ -17,12 +23,14 @@ type ActionMap<M extends { [index: string]: any }> = {
 };
 
 export enum ActionTypes {
+  AddAll = "ADD_ALL",
   Create = "CREATE_TODO",
   Delete = "DELETE_TODO",
   Update = "UPDATE_TODO",
 }
 
 type ActionPayload = {
+  [ActionTypes.AddAll]: Todo[];
   [ActionTypes.Create]: Todo;
   [ActionTypes.Delete]: Todo;
   [ActionTypes.Update]: Todo;
@@ -32,24 +40,22 @@ export type TodoActions =
   ActionMap<ActionPayload>[keyof ActionMap<ActionPayload>];
 
 const initialState = {
-  todos: [
-    { id: 0, task: "Gym", isComplete: true },
-    { id: 1, task: "Tan", isComplete: true },
-    { id: 2, task: "Laundry", isComplete: false },
-  ],
+  todos: [],
 };
 
-const reducer = (state: { todos: Todo[] }, action: TodoActions) => {
-  const sortTasks = (todos: Todo[]) => [
-    ...todos.filter((todo) => !todo.isComplete),
-    ...todos.filter((todo) => !!todo.isComplete),
-  ];
+const sortTasks = (todos: Todo[]) => [
+  ...todos.filter((todo) => !todo.isComplete),
+  ...todos.filter((todo) => !!todo.isComplete),
+];
 
+const reducer = (state: { todos: Todo[] }, action: TodoActions) => {
   switch (action.type) {
+    case ActionTypes.AddAll: {
+      return { ...state, todos: sortTasks(action.payload) };
+    }
     case ActionTypes.Create:
       const newTodos = [action.payload, ...state.todos];
 
-      console.log("create thang", newTodos);
       return {
         ...state,
         todos: sortTasks(newTodos),
@@ -59,22 +65,22 @@ const reducer = (state: { todos: Todo[] }, action: TodoActions) => {
         (task) => task.id !== action.payload.id
       );
 
-      console.log("delete thang", filtered);
       return {
         ...state,
         todos: sortTasks(filtered),
       };
     case ActionTypes.Update:
       const updated = state.todos.map((task) => {
-        console.log(task.id === action.payload.id);
         return task.id === action.payload.id ? action.payload : task;
       });
 
-      console.log("update thang", updated);
       return {
         ...state,
         todos: sortTasks(updated),
       };
+    default:
+      // TODO: error handling
+      return state;
   }
 };
 
@@ -91,13 +97,30 @@ type Props = {
 };
 
 const AppProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+  });
+
+  useEffect(() => {
+    dispatch({
+      type: ActionTypes.AddAll,
+      payload: sortTasks([
+        { id: 0, task: "Gym", isComplete: true },
+        { id: 1, task: "Tan", isComplete: true },
+        { id: 2, task: "Laundry", isComplete: false },
+      ]),
+    });
+  }, []);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
       {children}
     </AppContext.Provider>
   );
+};
+
+export const useAppContext = () => {
+  return useContext(AppContext);
 };
 
 export { AppProvider, AppContext };

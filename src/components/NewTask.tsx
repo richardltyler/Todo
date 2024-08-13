@@ -1,5 +1,5 @@
-import React, { ReactElement, useContext, useRef, useState } from "react";
-import { ActionTypes, AppContext } from "../context";
+import React, { ReactElement, useRef, useState } from "react";
+import { ActionTypes, useAppContext } from "../context";
 import { Todo } from "./App";
 
 type Props = {};
@@ -12,18 +12,17 @@ const emptyTodo: Todo = {
 
 export default function NewTask({}: Props): ReactElement {
   const [newTodo, setNewTodo] = useState(emptyTodo);
-  const { state, dispatch } = useContext(AppContext);
+  const { dispatch } = useAppContext();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (inputRef.current) {
+    if (inputRef.current?.value) {
+      dispatch({ type: ActionTypes.Create, payload: newTodo });
+      setNewTodo({ ...emptyTodo, id: Math.floor(Math.random() * 1000) + 1 });
       inputRef.current.value = "";
     }
-
-    dispatch({ type: ActionTypes.Create, payload: newTodo });
-    setNewTodo({ ...emptyTodo, id: Math.floor(Math.random() * 1000) + 1 });
   };
 
   return (
