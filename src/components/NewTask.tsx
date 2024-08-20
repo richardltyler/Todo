@@ -26,7 +26,7 @@ export default function NewTask({}: Props): ReactElement {
   };
 
   return (
-    <div className='NewTask'>
+    <div className='NewTask' data-testid='NewTask'>
       <form
         className='task-form'
         onSubmit={(event) => handleSubmit(event)}

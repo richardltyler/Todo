@@ -43,7 +43,7 @@ const initialState = {
   todos: [],
 };
 
-const sortTasks = (todos: Todo[]) => [
+export const sortTasks = (todos: Todo[]) => [
   ...todos.filter((todo) => !todo.isComplete),
   ...todos.filter((todo) => !!todo.isComplete),
 ];

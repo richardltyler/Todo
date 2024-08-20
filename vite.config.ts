@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import sass from "sass";
 
@@ -13,9 +13,16 @@ export default defineConfig({
   },
   plugins: [react()],
   test: {
+    coverage: {
+      provider: "v8",
+      all: false,
+    },
     // 👋 add the line below to add jsdom to vite
     environment: "jsdom",
     globals: true,
-    setupFiles: "./src/tests/setup.ts",
+    setupFiles: "./src/setup.ts",
+    include: ["./src/tests/**"],
+    exclude: [...configDefaults.exclude, "./src/main"],
+    reporters: "verbose",
   },
 });
