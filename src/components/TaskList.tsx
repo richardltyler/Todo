@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import { useAppContext } from "../context";
 import Task from "./Task";
 

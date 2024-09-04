@@ -6,6 +6,7 @@ import React, {
   useReducer,
 } from "react";
 import { Todo } from "./components/App";
+import { useData } from "./hooks/useData";
 
 type InitialStateType = {
   todos: Todo[];
@@ -43,7 +44,7 @@ const initialState = {
   todos: [],
 };
 
-const sortTasks = (todos: Todo[]) => [
+export const sortTasks = (todos: Todo[]) => [
   ...todos.filter((todo) => !todo.isComplete),
   ...todos.filter((todo) => !!todo.isComplete),
 ];
@@ -100,17 +101,16 @@ const AppProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
   });
+  const { data, isLoading, error } = useData();
 
   useEffect(() => {
-    dispatch({
-      type: ActionTypes.AddAll,
-      payload: sortTasks([
-        { id: 0, task: "Gym", isComplete: true },
-        { id: 1, task: "Tan", isComplete: true },
-        { id: 2, task: "Laundry", isComplete: false },
-      ]),
-    });
-  }, []);
+    if (!isLoading && !error && data) {
+      dispatch({
+        type: ActionTypes.AddAll,
+        payload: sortTasks(data.todos),
+      });
+    }
+  }, [data, isLoading, error]);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
@@ -120,7 +120,12 @@ const AppProvider: React.FC<Props> = ({ children }) => {
 };
 
 export const useAppContext = () => {
-  return useContext(AppContext);
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error("useAppContext must be used within AppProvider");
+  }
+
+  return context;
 };
 
 export { AppProvider, AppContext };

@@ -2,15 +2,13 @@ import React, { ReactElement, useRef, useState } from "react";
 import { ActionTypes, useAppContext } from "../context";
 import { Todo } from "./App";
 
-type Props = {};
-
 const emptyTodo: Todo = {
   id: Math.floor(Math.random() * 1000) + 1,
   task: "",
   isComplete: false,
 };
 
-export default function NewTask({}: Props): ReactElement {
+export default function NewTask(): ReactElement {
   const [newTodo, setNewTodo] = useState(emptyTodo);
   const { dispatch } = useAppContext();
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -26,7 +24,7 @@ export default function NewTask({}: Props): ReactElement {
   };
 
   return (
-    <div className='NewTask'>
+    <div className='NewTask' data-testid='NewTask'>
       <form
         className='task-form'
         onSubmit={(event) => handleSubmit(event)}

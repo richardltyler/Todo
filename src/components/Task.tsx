@@ -31,6 +31,18 @@ export default function Task({ task }: Props) {
     }
   };
 
+  const updateTaskOnBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    console.log("drugs");
+
+    if (inputRef.current?.value) {
+      dispatch({
+        type: ActionTypes.Update,
+        payload: { ...task, task: inputRef.current.value },
+      });
+    }
+  };
+
   return (
     <div className='Task' data-testid='Task'>
       <div className='checkbox-container'>
@@ -48,6 +60,7 @@ export default function Task({ task }: Props) {
             type='text'
             defaultValue={task.task}
             ref={inputRef}
+            onBlur={updateTaskOnBlur}
           />
         </form>
       </div>
