@@ -21,3 +21,8 @@ To add more features to this project, or to simply view the code in action...
 - Typescript
 - SASS
 - Jest/React-testing-library
+
+## Future Iterations
+1. Hook this up to a backend so that it is actually useable across time
+2. Make it into an app. If I'm going to use this, it needs to be convenient. Maybe a PWA?
+3. Once everything is set up, maybe setting up a suite of Cypress tests isn't a bad idea. 
